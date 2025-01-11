@@ -12,15 +12,14 @@
   let [offsetX, offsetY] = initValue;
   let [centerX, centerY] = initValue;
   let [originObjectX, originObjectY] = initValue;
+  // 물체의 위치
+  let [objectX, objectY] = [originObjectX, originObjectY];
   const [faceTranslateX, faceTranslateY] = [100, 155];
   let omega = 30; // 각진동수 (탄성) (rad/s)
   let damping = 5; // 값 감쇠 계수
   let time = 0;
   let dragging = false;
   const touchableRange = 80;
-
-  // 물체의 초기 위치
-  let [objectX, objectY] = [originObjectX, originObjectY];
 
   const update = () => {
     const facePath = new Path2D(pathData);
@@ -33,17 +32,13 @@
     if (!dragging) {
       // 진폭이 시간이 지남에 따라 감소 (감쇠 계수 적용)
       const dampingExp = Math.exp(-damping * time);
-      const [dampedAmplitudeX, dampedAmplitudeY] = [
-        amplitudeX * dampingExp,
-        amplitudeY * dampingExp,
-      ];
-
+      const dampedAmplitudeX = amplitudeX * dampingExp;
+      const dampedAmplitudeY = amplitudeY * dampingExp;
       // 2D 운동 계산
       const vm = Math.cos(omega * time); // vivrational Motion
       const [x, y] = [dampedAmplitudeX * vm, dampedAmplitudeY * vm];
-
-      objectX = originObjectX + x;
-      objectY = originObjectY + y;
+      // 물체의 위치
+      [objectX, objectY] = [originObjectX + x, originObjectY + y];
     }
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.lineWidth = 2;
@@ -74,24 +69,21 @@
     context.scale(1.5, 1.5);
     context.strokeStyle = "black";
 
-    // 내부에 살구색으로 칠하기
+    // 얼굴을 살구색으로 칠하기
     context.fillStyle = "peachpuff";
     context.fill(facePath);
     context.stroke(facePath);
     context.restore();
 
     // 볼 그리기 (부드럽게 휘어지게)
-    context.save();
     context.beginPath();
     context.moveTo(centerX - faceTranslateX + 1, centerY - 6);
 
-    // 제어점과 끝점 설정
-    const controlX1 = objectX - 100; // 제어점 X1
-    const controlY1 = objectY - 50; // 제어점 Y1
-    const controlX2 = objectX - 100; // 제어점 X2
-    const controlY2 = objectY + 120; // 제어점 Y2
+    // 볼 제어점과 끝점 설정
+    const [controlX1, controlY1] = [objectX - 100, objectY - 50];
+    const [controlX2, controlY2] = [objectX - 100, objectY + 120]; // 제어점 X2, Y2
 
-    // 곡선 그리기
+    // 볼 곡선 그리기
     context.bezierCurveTo(
       controlX1,
       controlY1,
@@ -104,10 +96,9 @@
     context.fillStyle = "peachpuff"; // 살구색
     context.fill(); // 내부 채우기
 
-    // 외곽선 그리기
+    // 볼 외곽선 그리기
     context.strokeStyle = "black";
     context.stroke();
-    context.restore();
 
     // 홍조 넣기
     context.beginPath();
@@ -148,11 +139,9 @@
 
   const endDrag = () => {
     dragging = false;
-    [amplitudeX, amplitudeY] = [
-      objectX - originObjectX,
-      objectY - originObjectY,
-    ];
     time = 0; // 초기화
+    amplitudeX = objectX - originObjectX;
+    amplitudeY = objectY - originObjectY;
   };
 
   onMount(() => {
