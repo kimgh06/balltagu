@@ -21,7 +21,7 @@
   let [originObjectX, originObjectY] = initValue;
   // 물체의 위치
   let [objectX, objectY] = [originObjectX, originObjectY];
-  const [faceTranslateX, faceTranslateY] = [100, 155];
+  const [faceTranslateX, faceTranslateY] = [100, 100];
   let omega = 30; // 각진동수 (탄성) (rad/s)
   let damping = 10; // 값 감쇠 계수
   let time = 0;
@@ -35,7 +35,7 @@
       window.innerHeight - 300,
     ];
     [centerX, centerY] = [windowWidth / 2, windowHeight / 2];
-    [originObjectX, originObjectY] = [centerX - 130, centerY + 70];
+    [originObjectX, originObjectY] = [centerX - 80, centerY + 50];
     if (!dragging) {
       // 진폭이 시간이 지남에 따라 감소 (감쇠 계수 적용)
       const dampingExp = Math.exp(-damping * time);
@@ -73,7 +73,6 @@
     context.save();
     context.beginPath();
     context.translate(centerX - faceTranslateX, centerY - faceTranslateY);
-    context.scale(1.5, 1.5);
     context.strokeStyle = "black";
 
     // 얼굴을 살구색으로 칠하기
@@ -109,8 +108,8 @@
 
     // 홍조 넣기
     context.beginPath();
-    context.arc(objectX, objectY, touchableRange - 30, 0, 2 * Math.PI);
-    context.fillStyle = "pink";
+    context.arc(objectX, objectY, touchableRange - 50, 0, 2 * Math.PI);
+    context.fillStyle = "white";
     context.fill();
 
     time += 0.016; // 60fps
@@ -158,7 +157,7 @@
         event.clientY - rect.top - offsetY,
       ];
       if (newObjectX > centerX) newObjectX = centerX;
-      if (newObjectY < centerY) newObjectY = centerY;
+      if (newObjectY < centerY - 100) newObjectY = centerY - 100;
       [objectX, objectY] = [newObjectX, newObjectY];
     }
   };
