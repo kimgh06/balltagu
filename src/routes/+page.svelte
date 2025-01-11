@@ -159,8 +159,7 @@
       ];
       if (newObjectX > centerX) newObjectX = centerX;
       if (newObjectY < centerY) newObjectY = centerY;
-      objectX = newObjectX;
-      objectY = newObjectY;
+      [objectX, objectY] = [newObjectX, newObjectY];
     }
   };
 
