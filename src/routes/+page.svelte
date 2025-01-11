@@ -10,10 +10,10 @@
   let context: CanvasRenderingContext2D;
 
   // 초기 변수
-  let amplitudeX = 100; // x축 초기 진폭 (px)
-  let amplitudeY = 50;  // y축 초기 진폭 (px)
+  let amplitudeX = 0; // x축 초기 진폭 (px)
+  let amplitudeY = 0;  // y축 초기 진폭 (px)
   let omega = 10;       // 각진동수 (탄성) (rad/s)
-  let damping = 3;   // 감쇠 계수
+  let damping = 3;   // 값 감쇠 계수
 
   let time = 0;
   let dragging = false;
@@ -110,19 +110,19 @@
   bind:this={canvas}
   width="800"
   height="600"
-  on:mousedown={startDrag}
-  on:mousemove={drag}
-  on:mouseup={endDrag}
-  on:mouseleave={endDrag}
+  on:pointerdown={startDrag}
+  on:pointermove={drag}
+  on:pointerup={endDrag}
+  on:pointerleave={endDrag}
 ></canvas>
 
 <div class="controls">
-  <label>Amplitude X: <input type="range" min="10" max="200" bind:value={amplitudeX} /></label>
-  <span>{Math.floor(amplitudeX * 100) / 1000}px</span><br />
-  <label>Amplitude Y: <input type="range" min="10" max="200" bind:value={amplitudeY} /></label>
+  <label>Amplitude X: <input type="range" min="-500" max="500" bind:value={amplitudeX} /></label>
+  <span>{Math.floor(amplitudeX * 100) / 100}px</span><br />
+  <label>Amplitude Y: <input type="range" min="-500" max="500" bind:value={amplitudeY} /></label>
   <span>{Math.floor(amplitudeY *100) / 100}px</span><br />
-  <label>Omega: <input type="range" min="1" max="20"  bind:value={omega} /></label>
+  <label>Omega (Speed): <input type="range" min="1" max="20" step="0.1" bind:value={omega} /></label>
   <span>{omega} rad/s</span><br />
-  <label>Damping: <input type="range" min="1" max="5" bind:value={damping} /></label>
+  <label>Damping (Level of stretchiness): <input type="range" min="1" max="5" step="0.1" bind:value={damping} /></label>
   <span>{damping}</span>
 </div>
