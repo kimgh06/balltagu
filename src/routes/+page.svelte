@@ -1,52 +1,118 @@
-<svelte:head>
-  <title>Interactive 2D Spring Simulator</title>
-  <meta name="description" content="A simple interactive 2D spring simulator with damping using Svelte." />
-</svelte:head>
-
 <script lang="ts">
   import { onMount } from "svelte";
-
   let canvas: HTMLCanvasElement;
   let context: CanvasRenderingContext2D;
+  const pathData =
+    "M0.999969 99C5 8.49999 154.5 -65.5 201 99C203 133.667 239 231 57 206";
 
   // 초기 변수
-  let amplitudeX = 0; // x축 초기 진폭 (px)
-  let amplitudeY = 0;  // y축 초기 진폭 (px)
-  let omega = 10;       // 각진동수 (탄성) (rad/s)
-  let damping = 3;   // 값 감쇠 계수
-
+  const initValue = [0, 0];
+  let [windowWidth, windowHeight] = initValue;
+  let [amplitudeX, amplitudeY] = initValue; // 진폭
+  let [offsetX, offsetY] = initValue;
+  let [centerX, centerY] = initValue;
+  let [originObjectX, originObjectY] = initValue;
+  const [faceTranslateX, faceTranslateY] = [100, 155];
+  let omega = 30; // 각진동수 (탄성) (rad/s)
+  let damping = 5; // 값 감쇠 계수
   let time = 0;
   let dragging = false;
-  let [offsetX, offsetY]= [0,0];
+  const touchableRange = 80;
 
   // 물체의 초기 위치
-  let objectX = 400, objectY = 300;
+  let [objectX, objectY] = [originObjectX, originObjectY];
 
   const update = () => {
+    const facePath = new Path2D(pathData);
+    [windowWidth, windowHeight] = [
+      window.innerWidth - 16,
+      window.innerHeight - 300,
+    ];
+    [centerX, centerY] = [windowWidth / 2, windowHeight / 2];
+    [originObjectX, originObjectY] = [centerX - 130, centerY + 70];
     if (!dragging) {
       // 진폭이 시간이 지남에 따라 감소 (감쇠 계수 적용)
-      const dampedAmplitudeX = amplitudeX * Math.exp(-damping * time);
-      const dampedAmplitudeY = amplitudeY * Math.exp(-damping * time);
+      const dampingExp = Math.exp(-damping * time);
+      const [dampedAmplitudeX, dampedAmplitudeY] = [
+        amplitudeX * dampingExp,
+        amplitudeY * dampingExp,
+      ];
 
       // 2D 운동 계산
-      const x = dampedAmplitudeX * Math.cos(omega * time);
-      const y = dampedAmplitudeY * Math.cos(omega * time);
+      const vm = Math.cos(omega * time); // vivrational Motion
+      const [x, y] = [dampedAmplitudeX * vm, dampedAmplitudeY * vm];
 
-      objectX = 400 + x;
-      objectY = 300 + y;
+      objectX = originObjectX + x;
+      objectY = originObjectY + y;
     }
-
-    // Canvas 그리기
     context.clearRect(0, 0, canvas.width, canvas.height);
+    context.lineWidth = 2;
+
+    // 가로 세로 점선 그리기
     context.beginPath();
-    context.moveTo(400, 300);
+    context.moveTo(centerX, 0);
+    context.lineTo(centerX, windowHeight);
+    context.strokeStyle = "gray";
+    context.stroke();
+    context.beginPath();
+    context.moveTo(0, centerY);
+    context.lineTo(windowWidth, centerY);
+    context.strokeStyle = "gray";
+    context.stroke();
+
+    // 거리 그리기
+    context.beginPath();
+    context.moveTo(originObjectX, originObjectY);
     context.lineTo(objectX, objectY);
     context.strokeStyle = "blue";
     context.stroke();
 
+    // 얼굴 그리기
+    context.save();
     context.beginPath();
-    context.arc(objectX, objectY, 10, 0, 2 * Math.PI);
-    context.fillStyle = "red";
+    context.translate(centerX - faceTranslateX, centerY - faceTranslateY);
+    context.scale(1.5, 1.5);
+    context.strokeStyle = "black";
+
+    // 내부에 살구색으로 칠하기
+    context.fillStyle = "peachpuff";
+    context.fill(facePath);
+    context.stroke(facePath);
+    context.restore();
+
+    // 볼 그리기 (부드럽게 휘어지게)
+    context.save();
+    context.beginPath();
+    context.moveTo(centerX - faceTranslateX + 1, centerY - 6);
+
+    // 제어점과 끝점 설정
+    const controlX1 = objectX - 100; // 제어점 X1
+    const controlY1 = objectY - 50; // 제어점 Y1
+    const controlX2 = objectX - 100; // 제어점 X2
+    const controlY2 = objectY + 120; // 제어점 Y2
+
+    // 곡선 그리기
+    context.bezierCurveTo(
+      controlX1,
+      controlY1,
+      controlX2,
+      controlY2,
+      centerX,
+      centerY + faceTranslateY,
+    );
+
+    context.fillStyle = "peachpuff"; // 살구색
+    context.fill(); // 내부 채우기
+
+    // 외곽선 그리기
+    context.strokeStyle = "black";
+    context.stroke();
+    context.restore();
+
+    // 홍조 넣기
+    context.beginPath();
+    context.arc(objectX, objectY, touchableRange - 30, 0, 2 * Math.PI);
+    context.fillStyle = "pink";
     context.fill();
 
     time += 0.016; // 60fps
@@ -59,7 +125,7 @@
     const mouseY = event.clientY - rect.top;
 
     const dist = Math.sqrt((mouseX - objectX) ** 2 + (mouseY - objectY) ** 2);
-    if (dist < 15) {
+    if (dist < touchableRange) {
       dragging = true;
       offsetX = mouseX - objectX;
       offsetY = mouseY - objectY;
@@ -69,17 +135,23 @@
   const drag = (event: MouseEvent) => {
     if (dragging) {
       const rect = canvas.getBoundingClientRect();
-      objectX = event.clientX - rect.left - offsetX;
-      objectY = event.clientY - rect.top - offsetY;
+      let [newObjectX, newObjectY] = [
+        event.clientX - rect.left - offsetX,
+        event.clientY - rect.top - offsetY,
+      ];
+      if (newObjectX > centerX) newObjectX = centerX;
+      if (newObjectY < centerY) newObjectY = centerY;
+      objectX = newObjectX;
+      objectY = newObjectY;
     }
   };
 
   const endDrag = () => {
     dragging = false;
-    const dx = objectX - 400;
-    const dy = objectY - 300;
-    amplitudeX = dx;
-    amplitudeY = dy;
+    [amplitudeX, amplitudeY] = [
+      objectX - originObjectX,
+      objectY - originObjectY,
+    ];
     time = 0; // 초기화
   };
 
@@ -88,6 +160,54 @@
     update();
   });
 </script>
+
+<svelte:head>
+  <title>Interactive 2D Ball-Tta-gu Simulator</title>
+  <meta
+    name="description"
+    content="A simple interactive 2D Balltagu simulator with damping using Svelte."
+  />
+</svelte:head>
+
+<h1>Interactive 2D Ball-Tta-gu Simulator</h1>
+<canvas
+  bind:this={canvas}
+  width={windowWidth}
+  height={windowHeight}
+  on:pointerdown={startDrag}
+  on:pointermove={drag}
+  on:pointerup={endDrag}
+  on:pointerleave={endDrag}
+></canvas>
+
+<div class="controls">
+  <span
+    >Object Position from Center: ({Math.floor(centerX - objectX)}px, {Math.floor(
+      centerY - objectY,
+    )}px)</span
+  ><br />
+
+  <label
+    >Omega (탄성): <input
+      type="range"
+      min="1"
+      max="50"
+      step="0.1"
+      bind:value={omega}
+    /></label
+  >
+  <span>{omega} rad/s</span><br />
+  <label
+    >Damping (힘 감소 속도): <input
+      type="range"
+      min="1"
+      max="10"
+      step="0.1"
+      bind:value={damping}
+    /></label
+  >
+  <span>{damping}</span>
+</div>
 
 <style>
   canvas {
@@ -104,25 +224,3 @@
     width: 300px;
   }
 </style>
-
-<h1>Interactive 2D Spring Simulator with Damping</h1>
-<canvas
-  bind:this={canvas}
-  width="800"
-  height="600"
-  on:pointerdown={startDrag}
-  on:pointermove={drag}
-  on:pointerup={endDrag}
-  on:pointerleave={endDrag}
-></canvas>
-
-<div class="controls">
-  <label>Amplitude X: <input type="range" min="-500" max="500" bind:value={amplitudeX} /></label>
-  <span>{Math.floor(amplitudeX * 100) / 100}px</span><br />
-  <label>Amplitude Y: <input type="range" min="-500" max="500" bind:value={amplitudeY} /></label>
-  <span>{Math.floor(amplitudeY *100) / 100}px</span><br />
-  <label>Omega (Speed): <input type="range" min="1" max="20" step="0.1" bind:value={omega} /></label>
-  <span>{omega} rad/s</span><br />
-  <label>Damping (Level of stretchiness): <input type="range" min="1" max="5" step="0.1" bind:value={damping} /></label>
-  <span>{damping}</span>
-</div>
