@@ -23,7 +23,7 @@
   let [objectX, objectY] = [originObjectX, originObjectY];
   const [faceTranslateX, faceTranslateY] = [100, 155];
   let omega = 30; // 각진동수 (탄성) (rad/s)
-  let damping = 5; // 값 감쇠 계수
+  let damping = 10; // 값 감쇠 계수
   let time = 0;
   let dragging = false;
   const touchableRange = 80;
@@ -219,7 +219,7 @@
     >Damping (힘 감소 속도): <input
       type="range"
       min="1"
-      max="10"
+      max="50"
       step="0.1"
       bind:value={damping}
     /></label
