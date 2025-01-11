@@ -193,8 +193,9 @@
   height={windowHeight}
   on:pointerdown={startDrag}
   on:pointermove={drag}
-  on:pointerup={endDrag}
-  on:pointerleave={endDrag}
+  on:mouseup={endDrag}
+  on:mouseleave={endDrag}
+  on:touchend={endDrag}
 ></canvas>
 
 <div class="controls">
@@ -209,7 +210,7 @@
     >Omega (탄성): <input
       type="range"
       min="1"
-      max="50"
+      max="100"
       step="0.1"
       bind:value={omega}
     /></label
@@ -219,7 +220,7 @@
     >Damping (힘 감소 속도): <input
       type="range"
       min="1"
-      max="50"
+      max="30"
       step="0.1"
       bind:value={damping}
     /></label
