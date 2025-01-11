@@ -8,6 +8,7 @@
   const supabaseUrl = import.meta.env.VITE_PUBLIC_SUPABASE_URL;
   const supabaseKey = import.meta.env.VITE_PUBLIC_SUPABASE_KEY;
   const supabase = createClient(supabaseUrl, supabaseKey);
+  console.log(supabaseUrl, supabaseKey);
 
   const pathData =
     "M0.999969 99C5 8.49999 154.5 -65.5 201 99C203 133.667 239 231 57 206";
