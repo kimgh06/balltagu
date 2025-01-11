@@ -1,7 +1,14 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { createClient } from "@supabase/supabase-js";
   let canvas: HTMLCanvasElement;
   let context: CanvasRenderingContext2D;
+  let count = 0;
+
+  const supabaseUrl = import.meta.env.VITE_PUBLIC_SUPABASE_URL;
+  const supabaseKey = import.meta.env.VITE_PUBLIC_SUPABASE_KEY;
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
   const pathData =
     "M0.999969 99C5 8.49999 154.5 -65.5 201 99C203 133.667 239 231 57 206";
 
@@ -77,7 +84,7 @@
 
     // 볼 그리기 (부드럽게 휘어지게)
     context.beginPath();
-    context.moveTo(centerX - faceTranslateX + 1, centerY - 6);
+    context.moveTo(centerX - faceTranslateX, centerY - 10);
 
     // 볼 제어점과 끝점 설정
     const [controlX1, controlY1] = [objectX - 100, objectY - 50];
@@ -110,6 +117,25 @@
     requestAnimationFrame(update);
   };
 
+  const getCountFromSupabase = async () => {
+    const { data, error } = await supabase.from("balltaguCount").select();
+    if (error) {
+      console.error("Error fetching data:", error);
+    } else {
+      count = data.length;
+    }
+  };
+
+  const sendToSupabase = async () => {
+    const { error } = await supabase
+      .from("balltaguCount")
+      .insert({ time: new Date().toISOString() });
+
+    if (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   const startDrag = (event: MouseEvent) => {
     const rect = canvas.getBoundingClientRect();
     const mouseX = event.clientX - rect.left;
@@ -119,7 +145,8 @@
     if (dist < touchableRange) {
       dragging = true;
       offsetX = mouseX - objectX;
-      offsetY = mouseY - objectY;
+      [offsetX, offsetY] = [mouseX - objectX, mouseY - objectY];
+      sendToSupabase();
     }
   };
 
@@ -142,9 +169,11 @@
     time = 0; // 초기화
     amplitudeX = objectX - originObjectX;
     amplitudeY = objectY - originObjectY;
+    getCountFromSupabase();
   };
 
   onMount(() => {
+    getCountFromSupabase();
     context = canvas.getContext("2d")!;
     update();
   });
@@ -170,6 +199,7 @@
 ></canvas>
 
 <div class="controls">
+  <h3>총 당긴 횟수: {count}</h3>
   <span
     >Object Position from Center: ({Math.floor(centerX - objectX)}px, {Math.floor(
       centerY - objectY,
