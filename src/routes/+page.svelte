@@ -47,7 +47,7 @@
       // 물체의 위치
       [objectX, objectY] = [originObjectX + x, originObjectY + y];
     }
-    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.clearRect(0, 0, canvas.width ?? 0, canvas.height ?? 0);
     context.lineWidth = 2;
 
     // 가로 세로 점선 그리기
