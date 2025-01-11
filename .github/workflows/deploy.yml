@@ -18,16 +18,16 @@ jobs:
         with:
           node-version: 18
 
+      - name: Create .env file for production
+        run: |
+          echo "VITE_PUBLIC_SUPABASE_URL=${{ secrets.VITE_PUBLIC_SUPABASE_URL }}" >> .env
+          echo "VITE_PUBLIC_SUPABASE_KEY=${{ secrets.VITE_PUBLIC_SUPABASE_KEY }}" >> .env
+          
       - name: Install dependencies
         run: npm install
 
       - name: Build the project
         run: npm run build
-        
-      - name: Create .env file for production
-        run: |
-          echo "VITE_PUBLIC_SUPABASE_URL=${{ secrets.VITE_PUBLIC_SUPABASE_URL }}" >> .env
-          echo "VITE_PUBLIC_SUPABASE_KEY=${{ secrets.VITE_PUBLIC_SUPABASE_KEY }}" >> .env
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
