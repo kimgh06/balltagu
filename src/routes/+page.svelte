@@ -123,12 +123,9 @@
   };
 
   const getCountFromSupabase = async () => {
-    const { data, error } = await supabase.from("balltaguCount").select();
-    if (error) {
-      console.error("Error fetching data:", error);
-    } else {
-      count = data.length;
-    }
+    count = (
+      await supabase.from("balltaguCount").select("*", { count: "exact" })
+    ).count as number;
   };
 
   const sendToSupabase = async () => {
