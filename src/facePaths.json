@@ -1,0 +1,96 @@
+{
+  "normal": [
+    {
+      "d": "M0.999969 99C5 8.49999 154.5 -65.5 201 99C203 133.667 239 231 57 206",
+      "stroke": "black",
+      "strokeLinecap": "round"
+    },
+    {
+      "d": "M29.4999 93.5C29.4999 115 77.5 111.5 77.5 95.5C77.5 72.3646 29.4999 76 29.4999 93.5Z",
+      "stroke": "black",
+      "strokeLinecap": "round"
+    },
+    {
+      "d": "M44.5 68C50 61.5 69.5 64 72.5 68",
+      "stroke": "black",
+      "strokeWidth": 2,
+      "strokeLinecap": "round"
+    },
+    {
+      "d": "M103 93.4918C103 114.992 151 111.492 151 95.4918C151 72.3564 103 75.9918 103 93.4918Z",
+      "stroke": "black",
+      "strokeLinecap": "round"
+    },
+    {
+      "d": "M120 151.755C120 190.629 193 184.301 193 155.372C193 113.54 120 120.114 120 151.755Z",
+      "stroke": "black",
+      "strokeLinecap": "round"
+    },
+    {
+      "d": "M113 67.9918C118.5 61.4918 138 63.9918 141 67.9918",
+      "stroke": "black",
+      "strokeWidth": 2,
+      "strokeLinecap": "round"
+    },
+    {
+      "d": "M56.5 149C63 154 76.1 154.6 80.5 149C84 151.833 97.2 155.8 104 149",
+      "stroke": "black",
+      "strokeWidth": 2,
+      "strokeLinecap": "round"
+    }
+  ],
+  "drag": [
+    {
+      "d": "M1 98.5606C5.00003 8.0606 154.5 -65.9394 201 98.5606C203 133.227 239 230.561 57 205.561",
+      "stroke": "black",
+      "strokeLinecap": "round"
+    },
+    {
+      "d": "M120 151.316C120 190.19 193 183.862 193 154.932C193 113.101 120 119.674 120 151.316Z",
+      "stroke": "black",
+      "strokeLinecap": "round"
+    },
+    {
+      "d": "M36.1975 89L74.2732 99.5115",
+      "stroke": "black",
+      "strokeWidth": 2,
+      "strokeLinecap": "round"
+    },
+    {
+      "d": "M35 93.3377L73.0757 103.849",
+      "stroke": "black",
+      "strokeWidth": 2,
+      "strokeLinecap": "round"
+    },
+    {
+      "d": "M111 99.6701L149.298 90",
+      "stroke": "black",
+      "strokeWidth": 2,
+      "strokeLinecap": "round"
+    },
+    {
+      "d": "M112.102 104.033L150.4 94.3631",
+      "stroke": "black",
+      "strokeWidth": 2,
+      "strokeLinecap": "round"
+    },
+    {
+      "d": "M56 76L74 81.5",
+      "stroke": "black",
+      "strokeWidth": 2,
+      "strokeLinecap": "round"
+    },
+    {
+      "d": "M134 77L111 82",
+      "stroke": "black",
+      "strokeWidth": 2,
+      "strokeLinecap": "round"
+    },
+    {
+      "d": "M101.5 153C92.5 141.5 68 147.833 61.5 153C55.9 157.8 61.5 158.667 65 158.5C75 156.667 93.2 156.1 96 160.5C99.5 166 111.073 165.232 101.5 153Z",
+      "stroke": "black",
+      "strokeWidth": 2,
+      "strokeLinecap": "round"
+    }
+  ]
+}
