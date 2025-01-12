@@ -46,7 +46,7 @@
       window.innerHeight - 300,
     ];
     [centerX, centerY] = [windowWidth / 2, windowHeight / 2];
-    [originObjectX, originObjectY] = [centerX - 80, centerY + 50];
+    [originObjectX, originObjectY] = [centerX - 90, centerY + 55];
     if (!dragging) {
       // 진폭이 시간이 지남에 따라 감소 (감쇠 계수 적용)
       const dampingExp = Math.exp(-damping * time);
@@ -85,10 +85,14 @@
 
     // 볼 그리기 (부드럽게 휘어지게)
     context.beginPath();
-    context.moveTo(centerX - faceTranslateX, centerY - 10);
+    context.moveTo(centerX - faceTranslateX, centerY);
+    context.lineTo(
+      centerX - faceTranslateX - (centerX - objectX) / 10,
+      centerY - (centerY - objectY) / 5,
+    );
 
     // 볼 제어점과 끝점 설정
-    const [controlX1, controlY1] = [objectX - 100, objectY - 50];
+    const [controlX1, controlY1] = [objectX - 60, objectY - 50];
     const [controlX2, controlY2] = [objectX - 100, objectY + 80]; // 제어점 X2, Y2
 
     // 볼 곡선 그리기
@@ -232,7 +236,7 @@
   <h3>총 당긴 횟수: {count}</h3>
   <span
     >Object Position from Center: ({Math.round(objectX - centerX)}px, {Math.round(
-      objectY - objectY,
+      objectY - centerY,
     )}px)</span
   ><br />
 
@@ -245,7 +249,12 @@
       bind:value={omega}
     /></label
   >
-  <span>{omega} rad/s</span><br />
+  <span
+    ><input
+      value={omega}
+      on:change={(e) => (omega = +(e.target as HTMLInputElement).value)}
+    /> rad/s</span
+  ><br />
   <label
     >Damping (힘 감소 속도): <input
       type="range"
@@ -255,7 +264,12 @@
       bind:value={damping}
     /></label
   >
-  <span>{damping}</span>
+  <span
+    ><input
+      value={damping}
+      on:change={(e) => (damping = +(e.target as HTMLInputElement).value)}
+    /></span
+  ><br />
 </div>
 
 <style>
