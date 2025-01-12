@@ -211,38 +211,6 @@
   });
 </script>
 
-<svelte:head>
-  <title>Interactive 2D Ball-Tta-gu Simulator</title>
-  <meta
-    name="description"
-    content="A simple interactive 2D Balltagu simulator with damping using Svelte."
-  />
-  <!-- 미리보기 -->
-  <meta property="og:title" content="Interactive 2D Ball-Tta-gu Simulator" />
-  <meta
-    property="og:description"
-    content="A simple interactive 2D Balltagu simulator with damping using Svelte."
-  />
-  <meta property="og:image" content="favicon.png" />
-  <meta property="og:url" content="https://kimgh06.github.io/balltagu/" />
-  <meta property="og:type" content="website" />
-  <meta
-    property="og:site_name"
-    content="Interactive 2D Ball-Tta-gu Simulator"
-  />
-  <meta property="og:locale" content="ko_KR" />
-  <meta property="og:locale:alternate" content="en_US" />
-  <meta property="og:locale:alternate" content="ja_JP" />
-  <meta property="og:locale:alternate" content="zh_CN" />
-  <meta property="og:locale:alternate" content="es_ES" />
-  <meta property="og:locale:alternate" content="fr_FR" />
-  <meta property="og:locale:alternate" content="de_DE" />
-  <meta property="og:locale:alternate" content="pt_BR" />
-  <meta property="og:locale:alternate" content="it_IT" />
-  <meta property="og:locale:alternate" content="ru_RU" />
-  <meta property="og:locale:alternate" content="vi_VN" />
-</svelte:head>
-
 <h1>Interactive 2D Ball-Tta-gu Simulator</h1>
 <canvas
   bind:this={canvas}
