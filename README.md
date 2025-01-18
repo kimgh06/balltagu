@@ -1,3 +1,6 @@
+# 볼따구 당기기 시뮬레이션.
+이 프로젝트는 에피드 게임즈의 "트릭컬 리바이브"의 가장 큰 특징인 "볼따구 당기기"를 svelte kit을 활용하여 canvas api와 연동해서 만든 팬 메이드 사이트이며, 에피드 게임즈와 전혀 관계가 없음을 알립니다.
+
 # sv
 
 Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
